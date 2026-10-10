@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Safiyah Sahrin — Interactive Media Portfolio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="nav"></nav>
+
+<section class="view" id="home"><h1>Nurnatrah<br>Safiyah's</h1><div id="stage"></div></section>
+
+<section class="view" id="about">
+ <div class="about-hero">
+  <h2>About<br>me</h2>
+
+  <div class="about-body">
+   <p class="about-text">Final-year Interactive media student who designs and builds digital experiences. I love turning ideas into clear, user-friendly interfaces, from research and wireframes to prototypes.</p>
+   <div class="about-actions">
+    <a class="btn" href="cv.pdf" download>Download CV</a>
+    <a class="btn" href="#contact">Get in touch!</a>
+   </div>
+   <p class="muted">What I use</p>
+   <p><span class="pill">Figma</span> <span class="pill">Adobe Creative Suite</span> <span class="pill">HTML/CSS/JS</span> <span class="pill">Blender</span></p>
+  </div>
+
+  <div class="me-polaroid">
+   <div class="me-img"><img src="images/me4.jpg" alt="Safiyah"></div>
+  </div>
+ </div>
+
+ <div class="facts">
+  <div><span class="muted">Studying</span><p>Interactive Media</p></div>
+  <div><span class="muted">Based in</span><p>Triang, Pahang</p></div>
+  <!-- <div><span class="muted">Achievement</span><p>1st place, FigMaxperience</p></div> -->
+  <div><span class="muted">Currently</span><p>Final-year student</p></div>
+ </div>
+</section>
+
+<section class="view" id="work"><div class="split"><div><h2>The<br>Work</h2><p class="lede">Selected projects from my interactive media studies.</p></div><div class="grid" id="workGrid"></div></div></section>
+
+<section class="view" id="logbook"><div class="split"><div><h2>Log-<br>book</h2><p class="lede">Weekly workshop progress.</p></div>
+<div>
+ <div class="stats"><div><strong id="sEntries">0</strong>entries</div><div><strong id="sHours">0</strong>hours logged</div><div><strong id="sDone">0</strong>completed</div></div>
+ <div class="muted">Workshop progress — <span id="weeksTxt"></span></div><div class="bar"><b id="bar"></b></div>
+ <details class="draft"><summary class="btn">Draft a new entry</summary>
+  <form class="entry" id="form">
+   <input name="week" type="number" min="1" max="30" placeholder="Week" required>
+   <input name="date" type="date" required>
+   <input name="hours" type="number" min="0" step="0.5" placeholder="Hours" required>
+   <select name="status"><option value="doing">In progress</option><option value="done">Done</option><option value="blocked">Blocked</option></select>
+   <input class="wide" name="title" placeholder="What did you work on?" required>
+   <textarea class="wide" name="notes" rows="3" placeholder="Notes, problems, next steps"></textarea>
+   <button class="btn" type="submit">Add draft</button>
+   <button class="btn" type="button" id="copyBtn">Copy drafts as code</button>
+  </form>
+  <p class="muted">Drafts are saved only in this browser. Copy them, then paste into <code>LOGBOOK</code> in script.js so lecturers can see them.</p>
+ </details>
+ <table id="logTable"></table>
+</div></div></section>
+
+<section class="view" id="contact">
+ <div class="contact-wrap">
+  <div class="paper-note"><p>safiyahsahrin@gmail.com</p><small>Interactive Media Student</small></div>
+  <div class="touch">
+   <h2>Get in<br>touch!</h2>
+   <div class="touch-list">
+   <p>
+  <a href="mailto:safiyahsahrin@gmail.com">safiyahsahrin@gmail.com</a><br>
+  <a href="https://www.linkedin.com/in/safiyahsahrin" target="_blank" rel="noopener">LinkedIn</a><br>
+  <a href="https://www.behance.net/safiyahsahi/projects" target="_blank" rel="noopener">Behance</a>
+</p>
+<p>Triang, Pahang<br>Malaysia</p>
+    <a class="btn" href="cv.pdf" download>Download CV</a>
+   </div>
+  </div>
+ </div>
+</section>
+
+<script src="projects.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
