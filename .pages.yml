@@ -1,0 +1,139 @@
+media:
+  input: images/logbook
+  output: images/logbook
+
+content:
+  - name: logbook
+    label: Logbook
+    type: file
+    path: logbook.json
+    format: json
+    fields:
+      - name: info
+        label: About the project
+        type: object
+        fields:
+          - { name: film, label: Short film, type: string }
+          - { name: genre, label: Genre, type: string }
+          - { name: group, label: Group, type: string }
+          - { name: position, label: My position, type: string }
+          - { name: supervisor, label: Supervisor, type: string }
+          - { name: tasks, label: What I am responsible for, type: string, list: true }
+      - { name: semesterStart, label: Week 1 Monday (YYYY-MM-DD), type: string }
+      - { name: totalWeeks, label: Total weeks, type: number }
+      - name: rules
+        label: Briefing rules
+        type: object
+        fields:
+          - { name: meetings, label: Meetings required, type: number }
+          - { name: early, label: Meetings before the cut-off week, type: number }
+          - { name: beforeWeek, label: Cut-off week, type: number }
+      - name: milestones
+        label: Timeline
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: weeks, label: Weeks (text), type: string }
+          - { name: from, label: From week, type: number }
+          - { name: to, label: To week, type: number }
+          - { name: what, label: What is due, type: string }
+      - name: weekly
+        label: Weekly log
+        type: object
+        list: true
+        fields:
+          - { name: week, label: Week number, type: number }
+          - { name: date, label: Date, type: date }
+          - { name: hours, label: Hours worked, type: number }
+          - name: status
+            label: Status
+            type: select
+            options:
+              values:
+                - { value: done, label: Done }
+                - { value: doing, label: In progress }
+                - { value: blocked, label: Blocked }
+          - { name: title, label: Title, type: string }
+          - { name: role, label: My role this week, type: string }
+          - { name: notes, label: What I did, type: text }
+          - name: evidence
+            label: Evidence (images, PDFs, docs)
+            type: object
+            list: true
+            fields:
+              - { name: src, label: File, type: file }
+              - { name: label, label: Caption, type: string }
+          - { name: link, label: Link (Drive, Figma, YouTube), type: string }
+      - name: meetings
+        label: Supervisor meetings
+        type: object
+        list: true
+        fields:
+          - { name: week, label: Week number, type: number }
+          - { name: date, label: Date, type: date }
+          - name: mode
+            label: Mode
+            type: select
+            options:
+              values: ["", Face to face, Online]
+          - { name: discussed, label: What we discussed, type: text }
+          - { name: feedback, label: Supervisor feedback, type: text }
+          - { name: next, label: Next steps, type: text }
+          - name: evidence
+            label: Evidence
+            type: object
+            list: true
+            fields:
+              - { name: src, label: File, type: file }
+              - { name: label, label: Caption, type: string }
+      - name: ai
+        label: AI usage
+        type: object
+        list: true
+        fields:
+          - { name: date, label: Date, type: date }
+          - { name: activity, label: Activity, type: string }
+          - { name: tool, label: AI tool / platform, type: string }
+          - { name: purpose, label: Purpose, type: text }
+          - { name: output, label: Output / result, type: text }
+          - { name: usage, label: How it was used, modified or improved, type: text }
+          - name: evidence
+            label: Evidence (screenshot of prompt/result)
+            type: object
+            list: true
+            fields:
+              - { name: src, label: File, type: file }
+              - { name: label, label: Caption, type: string }
+      - name: parts
+        label: Project progress
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Part title, type: string }
+          - { name: report, label: Progress report, type: string }
+          - { name: weeks, label: Weeks, type: string }
+          - name: items
+            label: Items
+            type: object
+            list: true
+            fields:
+              - { name: name, label: Name, type: string }
+              - name: status
+                label: Status
+                type: select
+                options:
+                  values:
+                    - { value: todo, label: Not started }
+                    - { value: doing, label: In progress }
+                    - { value: done, label: Done }
+                    - { value: blocked, label: Blocked }
+              - { name: note, label: Note, type: text }
+              - name: evidence
+                label: Evidence (storyboard, drafts, stills)
+                type: object
+                list: true
+                fields:
+                  - { name: src, label: File, type: file }
+                  - { name: label, label: Caption, type: string }
+              - { name: link, label: Link, type: string }

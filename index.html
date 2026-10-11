@@ -12,6 +12,29 @@
 
 <section class="view" id="home"><h1>Nurnatrah<br>Safiyah's</h1><div id="stage"></div></section>
 
+<section class="view" id="logbook"><div class="split lb">
+ <div class="lb-side">
+  <h2>Log-<br>book</h2>
+  <p class="lede">BITU3923 Workshop II. My individual online logbook for the project.</p>
+  <div class="lb-tabs" role="tablist" aria-label="Logbook sections">
+   <button class="lb-tab" role="tab" id="tab-overview" aria-controls="lb-overview" data-tab="overview" aria-selected="true">Overview</button>
+   <button class="lb-tab" role="tab" id="tab-weekly" aria-controls="lb-weekly" data-tab="weekly" aria-selected="false" tabindex="-1">Weekly log</button>
+   <button class="lb-tab" role="tab" id="tab-meetings" aria-controls="lb-meetings" data-tab="meetings" aria-selected="false" tabindex="-1">Supervisor meetings</button>
+   <button class="lb-tab" role="tab" id="tab-ai" aria-controls="lb-ai" data-tab="ai" aria-selected="false" tabindex="-1">AI usage</button>
+   <button class="lb-tab" role="tab" id="tab-work" aria-controls="lb-work" data-tab="work" aria-selected="false" tabindex="-1">Project Progress</button>
+  </div>
+ </div>
+ <div class="lb-main">
+  <div class="lb-panel" role="tabpanel" id="lb-overview" aria-labelledby="tab-overview"></div>
+  <div class="lb-panel" role="tabpanel" id="lb-weekly" aria-labelledby="tab-weekly" hidden></div>
+  <div class="lb-panel" role="tabpanel" id="lb-meetings" aria-labelledby="tab-meetings" hidden></div>
+  <div class="lb-panel" role="tabpanel" id="lb-ai" aria-labelledby="tab-ai" hidden></div>
+  <div class="lb-panel" role="tabpanel" id="lb-work" aria-labelledby="tab-work" hidden></div>
+ </div>
+</div></section>
+
+<section class="view" id="work"><div class="split"><div><h2>The<br>Work</h2><p class="lede">Selected projects from my interactive media studies.</p></div><div class="grid" id="workGrid"></div></div></section>
+
 <section class="view" id="about">
  <div class="about-hero">
   <h2>About<br>me</h2>
@@ -34,32 +57,10 @@
  <div class="facts">
   <div><span class="muted">Studying</span><p>Interactive Media</p></div>
   <div><span class="muted">Based in</span><p>Triang, Pahang</p></div>
-  <!-- <div><span class="muted">Achievement</span><p>1st place, FigMaxperience</p></div> -->
+  <div><span class="muted">Achievement</span><p>1st place, FigMaxperience</p></div>
   <div><span class="muted">Currently</span><p>Final-year student</p></div>
  </div>
 </section>
-
-<section class="view" id="work"><div class="split"><div><h2>The<br>Work</h2><p class="lede">Selected projects from my interactive media studies.</p></div><div class="grid" id="workGrid"></div></div></section>
-
-<section class="view" id="logbook"><div class="split"><div><h2>Log-<br>book</h2><p class="lede">Weekly workshop progress.</p></div>
-<div>
- <div class="stats"><div><strong id="sEntries">0</strong>entries</div><div><strong id="sHours">0</strong>hours logged</div><div><strong id="sDone">0</strong>completed</div></div>
- <div class="muted">Workshop progress — <span id="weeksTxt"></span></div><div class="bar"><b id="bar"></b></div>
- <details class="draft"><summary class="btn">Draft a new entry</summary>
-  <form class="entry" id="form">
-   <input name="week" type="number" min="1" max="30" placeholder="Week" required>
-   <input name="date" type="date" required>
-   <input name="hours" type="number" min="0" step="0.5" placeholder="Hours" required>
-   <select name="status"><option value="doing">In progress</option><option value="done">Done</option><option value="blocked">Blocked</option></select>
-   <input class="wide" name="title" placeholder="What did you work on?" required>
-   <textarea class="wide" name="notes" rows="3" placeholder="Notes, problems, next steps"></textarea>
-   <button class="btn" type="submit">Add draft</button>
-   <button class="btn" type="button" id="copyBtn">Copy drafts as code</button>
-  </form>
-  <p class="muted">Drafts are saved only in this browser. Copy them, then paste into <code>LOGBOOK</code> in script.js so lecturers can see them.</p>
- </details>
- <table id="logTable"></table>
-</div></div></section>
 
 <section class="view" id="contact">
  <div class="contact-wrap">
@@ -81,5 +82,6 @@
 
 <script src="projects.js"></script>
 <script src="script.js"></script>
+<script src="reveal.js"></script>
 </body>
 </html>

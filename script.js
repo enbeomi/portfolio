@@ -1,17 +1,8 @@
-/* ================= EDIT THIS PART ================= */
-const TOTAL_WEEKS = 14;
-
-// The logbook lecturers see. Add a new object each week (status: 'done' | 'doing' | 'blocked').
-const LOGBOOK = [
-  { week: 1, date: '2026-10-05', hours: 4, status: 'done', title: 'Workshop kickoff', notes: 'Brainstormed ideas, set up repo.' }
-];
-/* ================================================== */
-
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 /* navigation: header links scroll to each section */
-const pages = [['home', 'Home'], ['about', 'About'], ['work', 'Work'], ['logbook', 'Logbook'], ['contact', 'Contact']];
+const pages = [['home', 'Home'], ['logbook', 'Logbook'], ['work', 'Work'], ['about', 'About'], ['contact', 'Contact']];
 $('nav').innerHTML = pages.map(([id, l]) => `<a href="#${id}">${l}</a>`).join('');
 // highlight the link of the section currently on screen
 const links = [...document.querySelectorAll('nav a')];
@@ -62,37 +53,157 @@ const drop = () => { if (active) { active.classList.remove('drag'); active.style
 stage.addEventListener('pointerup', drop);
 stage.addEventListener('pointercancel', drop);
 
-/* logbook */
-const KEY = 'logbook-drafts';
-const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch { return []; } };
-const save = d => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch {} };
-let drafts = load();
-const label = { done: 'Done', doing: 'In progress', blocked: 'Blocked' };
+/* ===================== LOGBOOK ===================== */
+// Data lives in logbook.js. This part only draws it.
+fetch('logbook.json', { cache: 'no-store' }).then(r => r.json()).then(LB => {
+  const STATUS = { done: 'Done', doing: 'In progress', blocked: 'Blocked', todo: 'Not started' };
+  const real = list => (list || []).filter(e => !e.sample);               // examples are not counted
+  const tag = e => e.sample ? '<span class="pill sample">Sample</span>' : '';
+  const empty = msg => `<p class="muted">${msg}</p>`;
+  const fmtDate = d => {
+    if (!d) return '';
+    const t = new Date(d + 'T00:00:00');
+    return isNaN(t) ? String(d) : t.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+  const row = (label, text) => text ? `<div><dt>${label}</dt><dd>${esc(text)}</dd></div>` : '';
+  const isImg = s => /\.(jpe?g|png|gif|webp|avif|svg)$/i.test(s.split('?')[0]);
+  const fileTag = s => (s.match(/\.(pdf|docx?|pptx?|xlsx?|mp4|mov)$/i) || [, 'link'])[1].toUpperCase();
+  const thumbs = list => (list && list.length)
+    ? '<div class="lb-thumbs">' + list.filter(x => x && (typeof x === 'string' || x.src)).map(x => {
+        const src = typeof x === 'string' ? x : x.src;
+        const label = (typeof x === 'string' ? '' : x.label) || '';
+        if (isImg(src)) {
+          return `<a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="${esc(label || 'Evidence')}" loading="lazy"></a>`;
+        }
+        return `<a class="lb-file" href="${esc(src)}" target="_blank" rel="noopener"><b>${fileTag(src)}</b> ${esc(label || 'Open file')}</a>`;
+      }).join('') + '</div>'
+    : '';
+  const openLink = url => url ? `<p><a class="btn small" href="${esc(url)}" target="_blank" rel="noopener">Open link</a></p>` : '';
+  const pct = (n, total) => Math.min(100, total ? n / total * 100 : 0);
 
-function renderLog() {
-  const all = [...LOGBOOK.map(e => ({ ...e, draft: false })), ...drafts.map(e => ({ ...e, draft: true }))]
-    .sort((a, b) => b.week - a.week || (b.date || '').localeCompare(a.date || ''));
-  const hours = all.reduce((s, e) => s + (+e.hours || 0), 0);
-  const weeks = new Set(all.map(e => e.week)).size;
-  $('sEntries').textContent = all.length;
-  $('sHours').textContent = hours;
-  $('sDone').textContent = all.filter(e => e.status === 'done').length;
-  $('weeksTxt').textContent = `${weeks} of ${TOTAL_WEEKS} weeks logged`;
-  $('bar').style.width = Math.min(100, weeks / TOTAL_WEEKS * 100) + '%';
-  $('logTable').innerHTML = all.length
-    ? '<tr><th>Week</th><th>Entry</th><th>Hours</th><th>Status</th></tr>' + all.map(e =>
-      `<tr><td>${esc(e.week)}<div class="muted">${esc(e.date)}</div></td><td>${esc(e.title)}${e.draft ? ' <span class="muted">(draft, only on this device)</span>' : ''}<div class="muted">${esc(e.notes)}</div></td><td>${esc(e.hours)}</td><td><span class="pill ${esc(e.status)}">${label[e.status] || ''}</span></td></tr>`).join('')
-    : '<p class="muted">No entries yet.</p>';
-}
-$('form').addEventListener('submit', e => {
-  e.preventDefault();
-  const d = Object.fromEntries(new FormData(e.target));
-  d.week = +d.week; d.hours = +d.hours;
-  drafts.push(d); save(drafts); e.target.reset(); renderLog();
-});
-$('copyBtn').addEventListener('click', async () => {
-  const code = drafts.map(d => '  ' + JSON.stringify(d)).join(',\n');
-  try { await navigator.clipboard.writeText(code); $('copyBtn').textContent = 'Copied'; } catch { prompt('Copy this:', code); }
-  setTimeout(() => $('copyBtn').textContent = 'Copy drafts as code', 1500);
-});
-renderLog();
+  // week number today, worked out from semesterStart in logbook.js
+  const weekNow = () => {
+    if (!LB.semesterStart) return null;
+    const start = new Date(LB.semesterStart + 'T00:00:00');
+    if (isNaN(start)) return null;
+    const w = Math.floor((Date.now() - start) / 864e5 / 7) + 1;
+    return w >= 1 && w <= LB.totalWeeks ? w : null;
+  };
+
+  /* Overview: who/what, the counters, and the timeline */
+  const overview = () => {
+    const i = LB.info || {};
+    const rows = [['Short film', i.film], ['Genre', i.genre], ['Group', i.group], ['My position', i.position], ['Supervisor', i.supervisor]].filter(r => r[1]);
+    const tasks = (i.tasks || []).filter(Boolean);
+    const info = (rows.length || tasks.length)
+      ? '<div class="lb-info">' + rows.map(([k, v]) => `<div><span class="muted">${k}</span><p>${esc(v)}</p></div>`).join('') +
+        (tasks.length ? `<div class="wide"><span class="muted">What I am responsible for</span><ul>${tasks.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>` : '') + '</div>'
+      : '';
+
+    const r = LB.rules;
+    const meets = real(LB.meetings);
+    const early = meets.filter(m => +m.week < r.beforeWeek).length;
+    const weeks = new Set(real(LB.weekly).map(e => e.week)).size;
+    const items = LB.parts.flatMap(p => p.items);
+    const done = items.filter(x => x.status === 'done').length;
+    const aiCount = real(LB.ai).length;
+    const now = weekNow();
+
+    const stats = `<div class="stats">
+      <div><strong>${meets.length}/${r.meetings}</strong>supervisor meetings</div>
+      <div><strong>${early}/${r.early}</strong>meetings before Week ${r.beforeWeek}</div>
+      <div><strong>${weeks}</strong>weeks logged</div>
+      <div><strong>${done}/${items.length}</strong>items done</div>
+      <div><strong>${aiCount}</strong>AI uses recorded</div>
+    </div>`;
+
+    const mile = '<ol class="lb-mile">' + LB.milestones.map(m => {
+      const cls = now == null ? '' : (now >= m.from && now <= m.to ? 'is-now' : (now > m.to ? 'is-past' : ''));
+      return `<li class="${cls}"><span class="muted">Weeks ${esc(m.weeks)}${cls === 'is-now' ? ' · now' : ''}</span><b>${esc(m.label)}</b><small>${esc(m.what)}</small></li>`;
+    }).join('') + '</ol>';
+
+    return info + stats + (now ? `<p class="lb-now muted">It is Week ${now} of ${LB.totalWeeks}.</p>` : '') + '<h3 class="lb-sub">Timeline</h3>' + mile;
+  };
+
+  /* Weekly log: newest week first */
+  const weekly = () => {
+    const list = [...(LB.weekly || [])].sort((a, b) => (b.week - a.week) || (b.date || '').localeCompare(a.date || ''));
+    if (!list.length) return empty('No weekly entries yet.');
+    return '<div class="lb-list">' + list.map(e => `<article class="lb-item">
+      <header><span class="lb-wk">Week ${esc(e.week)}</span><span class="muted">${esc(fmtDate(e.date))}${e.hours ? ' · ' + esc(e.hours) + ' h' : ''}</span>${e.status ? `<span class="pill ${esc(e.status)}">${STATUS[e.status] || ''}</span>` : ''}${tag(e)}</header>
+      <h3>${esc(e.title)}</h3>
+      ${e.role ? `<p class="muted">My role: ${esc(e.role)}</p>` : ''}
+      ${e.notes ? `<p>${esc(e.notes)}</p>` : ''}
+      ${thumbs(e.evidence)}${openLink(e.link)}
+    </article>`).join('') + '</div>';
+  };
+
+  /* Supervisor meetings: numbered oldest to newest, shown newest first */
+  const meetings = () => {
+    const r = LB.rules;
+    const all = real(LB.meetings);
+    const early = all.filter(m => +m.week < r.beforeWeek).length;
+    const head = `<div class="lb-count">
+      <p><strong>${all.length}</strong> of ${r.meetings} supervision meetings</p>
+      <div class="bar"><b style="width:${pct(all.length, r.meetings)}%"></b></div>
+      <p class="muted">${early} of ${r.early} completed before Week ${r.beforeWeek}</p>
+    </div>`;
+    let n = 0;
+    const list = [...(LB.meetings || [])].sort((a, b) => (a.date || '').localeCompare(b.date || ''))
+      .map(m => ({ ...m, label: m.sample ? 'Example meeting' : 'Meeting ' + (++n) })).reverse();
+    if (!list.length) return head + empty('No meetings recorded yet.');
+    return head + '<div class="lb-list">' + list.map(m => `<article class="lb-item">
+      <header><span class="lb-wk">${esc(m.label)}</span><span class="muted">Week ${esc(m.week)} · ${esc(fmtDate(m.date))}${m.mode ? ' · ' + esc(m.mode) : ''}</span>${tag(m)}</header>
+      <dl class="lb-dl">${row('What we discussed', m.discussed)}${row('Supervisor feedback', m.feedback)}${row('Next steps', m.next)}</dl>
+      ${thumbs(m.evidence)}
+    </article>`).join('') + '</div>';
+  };
+
+  /* AI usage: the six things the briefing asks for */
+  const ai = () => {
+    const list = [...(LB.ai || [])].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    const note = '<p class="lb-note">Every use of AI in this project is recorded here: the date and activity, the tool, the purpose, the result, and how the output was used, modified or improved.</p>';
+    if (!list.length) return note + empty('No AI use recorded yet.');
+    return note + '<div class="lb-list">' + list.map(e => `<article class="lb-item">
+      <header><span class="lb-wk">${esc(fmtDate(e.date))}</span><span class="muted">${esc(e.tool)}</span>${tag(e)}</header>
+      <dl class="lb-dl">${row('Activity', e.activity)}${row('AI tool / platform', e.tool)}${row('Purpose', e.purpose)}${row('Output / result', e.output)}${row('How it was used, modified or improved', e.usage)}</dl>
+      ${thumbs(e.evidence)}
+    </article>`).join('') + '</div>';
+  };
+
+  /* My work: grouped by progress report */
+  const work = () => LB.parts.map(p => {
+    const done = p.items.filter(x => x.status === 'done').length;
+    return `<section class="lb-part">
+      <h3 class="lb-sub">${esc(p.title)}</h3>
+      <p class="muted">${[p.report, p.weeks].filter(Boolean).map(esc).join(' · ')} · ${done} of ${p.items.length} done</p>
+      <div class="lb-cards">${p.items.map(x => `<article class="lb-card">
+        <header><h4>${esc(x.name)}</h4><span class="pill ${esc(x.status)}">${STATUS[x.status] || ''}</span></header>
+        ${x.note ? `<p>${esc(x.note)}</p>` : ''}
+        ${thumbs(x.evidence)}${openLink(x.link)}
+      </article>`).join('')}</div>
+    </section>`;
+  }).join('');
+
+  Object.entries({ overview, weekly, meetings, ai, work }).forEach(([id, draw]) => {
+    const el = $('lb-' + id);
+    if (el) el.innerHTML = draw();
+  });
+
+  /* Tabs (mouse and arrow keys) */
+  const tabs = [...document.querySelectorAll('.lb-tab')];
+  const pick = id => {
+    tabs.forEach(t => { const on = t.dataset.tab === id; t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1; });
+    document.querySelectorAll('.lb-panel').forEach(p => (p.hidden = p.id !== 'lb-' + id));
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => pick(t.dataset.tab));
+    t.addEventListener('keydown', e => {
+      const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (!d) return;
+      e.preventDefault();
+      const next = tabs[(i + d + tabs.length) % tabs.length];
+      next.focus(); pick(next.dataset.tab);
+    });
+  });
+}).catch(err => console.error('Could not load logbook.json', err));

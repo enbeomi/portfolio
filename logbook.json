@@ -1,0 +1,96 @@
+{
+  "info": {
+    "film": "Bukti (The Evidence)",
+    "genre": "Neo-Noir / Action / Tactical MMA",
+    "group": "",
+    "position": "Audio Engineer & Sound Designer",
+    "supervisor": "Prof. Madya Dr Mohd Hafiz bin Zakaria",
+    "tasks": [
+      "Location audio recording",
+      "Foley impact editing",
+      "Voiceover sync",
+      "Background music score"
+    ]
+  },
+  "semesterStart": "2026-09-28",
+  "totalWeeks": 15,
+  "rules": { "meetings": 7, "early": 5, "beforeWeek": 12 },
+  "milestones": [
+    { "label": "Proposal", "weeks": "1–2", "from": 1, "to": 2, "what": "Proposal submission (due 9 Oct 2026)" },
+    { "label": "Progress Report 1", "weeks": "4–5", "from": 4, "to": 5, "what": "Storyline, script, cinematic storyboard · Portfolio Pt 1" },
+    { "label": "Progress Report 2", "weeks": "5–8", "from": 5, "to": 8, "what": "50% video · T-shirt and poster design · Portfolio Pt 2" },
+    { "label": "Progress Report 3", "weeks": "8–12", "from": 8, "to": 12, "what": "95% video · Thumbnail design · TikTok video · Portfolio Pt 3" },
+    { "label": "Submissions", "weeks": "12–13", "from": 12, "to": 13, "what": "Poster and T-shirt printing · Video for FTMK YouTube · TikTok video" },
+    { "label": "Final report", "weeks": "13–15", "from": 13, "to": 15, "what": "Final report and production group assessment" },
+    { "label": "Exhibition", "weeks": "14", "from": 14, "to": 14, "what": "Short film showcase and promotional items" }
+  ],
+  "weekly": [
+    {
+      "week": 1, "date": "2026-09-28", "hours": "", "status": "done",
+      "title": "Brainstormed story ideas as a group",
+      "role": "Audio Engineer & Sound Designer",
+      "notes": "Every member came with their own story idea and presented it to the group. I also came up with my own ideas, using AI (Claude) only to help me generate and expand possible storylines. We compared the ideas and started listing what each one would need to produce. Next: decide on one storyline together.",
+      "evidence": [],
+      "link": ""
+    },
+    {
+      "week": 2, "date": "2026-10-05", "hours": "", "status": "done",
+      "title": "Decided the storyline and planned how to produce it",
+      "role": "Audio Engineer & Sound Designer",
+      "notes": "We decided on the final storyline together, with every member giving their opinion. After that we discussed how to produce it: the production procedure, the tools and equipment, who handles each part, and our shared vision for the look of the film. We also thought about my audio tasks (location recording, foley, voiceover sync and music score) and what they need on set. Next: write the script and the cinematic storyboard.",
+      "evidence": [],
+      "link": ""
+    },
+    {
+      "week": 2, "date": "2026-10-09", "hours": "", "status": "done",
+      "title": "Finished the storyline, script and cinematic storyboard",
+      "role": "Audio Engineer & Sound Designer",
+      "notes": "The group completed the storyline, the script and the cinematic storyboard ahead of Progress Report 1. We reviewed them from the audio side and noted where sound design, foley and voiceover will be needed. Next: prepare for the 50% video (Progress Report 2).",
+      "evidence": [],
+      "link": ""
+    }
+  ],
+  "meetings": [
+    {
+      "week": 2, "date": "2026-10-05", "mode": "",
+      "discussed": "Each member shared their story idea, and the group decided together which story was best. We also agreed on the tools, the equipment setup and our shared vision for how the film should look.",
+      "feedback": "",
+      "next": "",
+      "evidence": []
+    }
+  ],
+  "ai": [
+    {
+      "date": "2026-10-03",
+      "activity": "Generated story ideas for the short film (personal brainstorming)",
+      "tool": "Claude (Anthropic)",
+      "purpose": "To get extra ideas and structure for a possible storyline, so I had something to contribute when every member presented their ideas to the group.",
+      "output": "A written short film idea proposal (PDF) with a logline, characters, a timed storyline, a table showing how the idea meets the briefing requirements, a draft AI declaration table, team roles, promotional item concepts and risks.",
+      "usage": "I used it only as inspiration for my own brainstorming and as one idea among the group's ideas. It was not submitted as the final work. The final storyline was decided by the whole group through discussion.",
+      "evidence": []
+    }
+  ],
+  "parts": [
+    { "title": "Part 1", "report": "Progress Report 1", "weeks": "Weeks 4–5", "items": [
+      { "name": "Storyline", "status": "done", "note": "Every member gave ideas and the group chose the final storyline together.", "evidence": [], "link": "" },
+      { "name": "Script", "status": "done", "note": "Script completed by the group.", "evidence": [], "link": "" },
+      { "name": "Cinematic storyboard", "status": "done", "note": "Cinematic storyboard completed, with the production procedure planned.", "evidence": [], "link": "" }
+    ]},
+    { "title": "Part 2", "report": "Progress Report 2", "weeks": "Weeks 5–8", "items": [
+      { "name": "50% complete video", "status": "todo", "note": "", "evidence": [], "link": "" },
+      { "name": "T-shirt design", "status": "todo", "note": "", "evidence": [], "link": "" },
+      { "name": "Poster design", "status": "todo", "note": "", "evidence": [], "link": "" }
+    ]},
+    { "title": "Part 3", "report": "Progress Report 3", "weeks": "Weeks 8–12", "items": [
+      { "name": "95% complete video", "status": "todo", "note": "", "evidence": [], "link": "" },
+      { "name": "Thumbnail design", "status": "todo", "note": "", "evidence": [], "link": "" },
+      { "name": "TikTok video", "status": "todo", "note": "", "evidence": [], "link": "" }
+    ]},
+    { "title": "Compulsory items", "report": "Judged at the exhibition", "weeks": "", "items": [
+      { "name": "Chroma key / green screen at Studio Multimedia", "status": "todo", "note": "", "evidence": [], "link": "" },
+      { "name": "AI-generated movie poster", "status": "todo", "note": "", "evidence": [], "link": "" },
+      { "name": "AI-generated video (maximum 10%)", "status": "todo", "note": "", "evidence": [], "link": "" },
+      { "name": "Additional requirement (add your choice)", "status": "todo", "note": "", "evidence": [], "link": "" }
+    ]}
+  ]
+}
